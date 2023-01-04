@@ -7,7 +7,31 @@ const CONSTANTS = {
   MODULE_NAME: module_name,
   PATH: module_path,
   FLAG: flag,
-  ITEM_PILES: {},
+
+  VAULT_COST: "50gp",
+
+  VAULT_DEFAULTS: (playerActor) => ({
+    type: "vault",
+    cols: 14,
+    rows: 7,
+    vaultExpansion: true,
+    baseExpansionCols: 2,
+    baseExpansionRows: 7,
+    preventVaultAccess: true,
+    vaultAccess: [{
+      uuid: playerActor.uuid,
+      organize: true,
+      items: {
+        withdraw: true,
+        deposit: true
+      },
+      currencies: {
+        withdraw: true,
+        deposit: true
+      }
+    }],
+    logVaultActions: true
+  })
 
 }
 
