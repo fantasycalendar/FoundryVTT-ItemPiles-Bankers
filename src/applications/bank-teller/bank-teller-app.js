@@ -4,34 +4,28 @@ import * as lib from "../../lib.js";
 
 export default class BankTellerApp extends SvelteApplication {
 
-  /**
-   * @param options
-   * @param dialogData
-   */
-  constructor(options = {}, dialogData = {}) {
+  constructor(options, dialogOptions) {
     super({
       id: `item-piles-bankers-${options.bankerActor?.id}-${randomID()}`,
       title: options.bankerActor.name,
-      svelte: {
-        class: BankTellerShell,
-        target: document.body,
-      },
-      zIndex: 100,
       ...options,
-      top: window.innerHeight / 1.75,
-    }, {
-      ...dialogData
-    });
+    }, dialogOptions);
   }
 
   /** @inheritdoc */
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
-      closeOnSubmit: false,
+      svelte: {
+        class: BankTellerShell,
+        target: document.body,
+      },
       classes: ["app window-app sheet item-piles-bankers"],
+      zIndex: 100,
+      width: 450,
+      height: "auto",
+      closeOnSubmit: false,
       resizable: false,
-      width: 400,
-      height: "auto"
+      top: window.innerHeight / 1.75,
     });
   }
 

@@ -8,15 +8,13 @@ const CONSTANTS = {
   PATH: module_path,
   FLAG: flag,
 
-  VAULT_COST: "50gp",
-
   VAULT_DEFAULTS: (playerActor) => ({
     type: "vault",
-    cols: 14,
-    rows: 7,
+    cols: 12,
+    rows: 8,
     vaultExpansion: true,
     baseExpansionCols: 2,
-    baseExpansionRows: 7,
+    baseExpansionRows: 8,
     preventVaultAccess: true,
     vaultAccess: [{
       uuid: playerActor.uuid,
@@ -30,7 +28,8 @@ const CONSTANTS = {
         deposit: true
       }
     }],
-    logVaultActions: true
+    logVaultActions: true,
+    vaultLogType: "user"
   })
 
 }
