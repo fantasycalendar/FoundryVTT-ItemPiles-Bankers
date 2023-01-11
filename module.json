@@ -29,7 +29,11 @@
     "requires": [
       {
         "id": "item-piles",
-        "type": "module"
+        "type": "module",
+        "compatibility": {
+          "minimum": "2.4.0",
+          "verified": "2.4.0"
+        }
       },
       {
         "id": "socketlib",
