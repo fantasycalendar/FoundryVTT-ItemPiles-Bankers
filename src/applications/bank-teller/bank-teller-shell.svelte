@@ -5,6 +5,7 @@
   import { getContext } from 'svelte';
   import * as lib from "../../lib.js";
   import CreateNewVaultDialog from "../components/CreateNewVaultDialog.svelte";
+  import BankerSocket from "../../sockets.js";
 
   const { application } = getContext('external');
 
@@ -16,12 +17,16 @@
   const flags = bankerActor.getFlag("item-piles", 'data');
   const maxVaults = flags.maxVaults;
   const { vaultPrice, canBuy } = lib.getCostOfVault(bankerActor, playerActor);
-  const currentVaults = lib.getVaults({ bankerActor, userId: game.user.id }).map(vault => ({
-    id: vault.id,
-    uuid: vault.uuid,
-    name: vault.name
-  }));
+  let currentVaults = getCurrentVaults();
   let selectedVault = currentVaults[0]?.id ?? "new";
+
+  function getCurrentVaults(){
+    return lib.getVaults({ bankerActor, userId: game.user.id }).map(vault => ({
+      id: vault.id,
+      uuid: vault.uuid,
+      name: vault.name
+    }));
+  }
 
   function buttonPressed() {
     if (selectedVault === 'new') {
@@ -63,6 +68,35 @@
     return openVault(vault);
   }
 
+  async function renameVault() {
+
+    const vault = currentVaults.find(actor => actor.id === selectedVault);
+    const result = await new Promise(resolve => {
+      let options = { resolve };
+      new TJSDialog({
+        title: "Rename vault",
+        content: {
+          class: CreateNewVaultDialog,
+          props: {
+            vaultName: vault.name
+          }
+        },
+        label: "Rename",
+        modal: true,
+        draggable: false,
+        autoClose: true,
+        close: () => options.resolve?.(null)
+      }, options).render(true);
+    });
+
+    if (!result || result === vault.name) return;
+
+    await BankerSocket.FUNCTIONS.RENAME_VAULT(vault, result);
+
+    currentVaults = getCurrentVaults();
+
+  }
+
   const maxVaultWarning = currentVaults.length >= maxVaults ? `You have reached the maximum number of vaults (${maxVaults}) at this bank.` : "";
 
 </script>
@@ -86,7 +120,7 @@
     </p>
   </div>
 
-  {#if canBuy && currentVaults.length}
+  {#if currentVaults.length}
 
     <div class="item-piles-flexrow">
 
@@ -102,15 +136,22 @@
       </select>
 
       <button type="button" style="flex: 0 1 30%; width: auto; line-height: inherit;"
-              on:click={() => buttonPressed()}>
+              on:click={() => buttonPressed()}
+      >
         {selectedVault === "new" ? "Purchase new vault" : "Open vault"}
       </button>
 
+      {#if selectedVault !== "new"}
+        <button type="button" style="flex: 0 1 10%; width: auto; line-height: inherit;"
+                on:click={() => renameVault()}
+        >
+          Rename
+        </button>
+      {/if}
+
     </div>
 
-  {/if}
-
-  {#if !currentVaults.length}
+  {:else}
 
     <button type="button" style="font-size:1.25rem; line-height: inherit; padding: 0.5rem 0;"
             on:click={() => buttonPressed()} disabled={!canBuy}>

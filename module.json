@@ -30,6 +30,10 @@
       {
         "id": "item-piles",
         "type": "module"
+      },
+      {
+        "id": "socketlib",
+        "type": "module"
       }
     ]
   },

@@ -1,10 +1,12 @@
 import "./styles/styles.scss";
 import * as lib from "./lib.js";
+import BankerSocket from "./sockets.js";
 
 Hooks.once('item-piles-ready', async function() {
 
   Hooks.on(game.itempiles.hooks.PILE.PRE_CLICK, lib.bankTellerClicked);
   Hooks.on(game.itempiles.hooks.PILE.PRE_DIRECTORY_CLICK, lib.bankTellerClicked);
+  Hooks.on(game.itempiles.hooks.PILE.PRE_RIGHT_CLICK_ITEM, lib.vaultItemRightClicked);
 
   game.itempiles.API.registerItemPileType("banker", "Banker", {
     maxVaults: {
@@ -21,5 +23,6 @@ Hooks.once('item-piles-ready', async function() {
     },
   });
 
-});
+  BankerSocket.initialize();
 
+});

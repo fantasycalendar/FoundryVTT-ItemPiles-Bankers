@@ -58,6 +58,9 @@
 
       const userId = vault.getFlag(CONSTANTS.MODULE_NAME, 'vaultUserId');
       const user = game.users.get(userId);
+
+      if(!user) return acc;
+
       const vaultGridData = game.itempiles.API.getVaultGridData(vault);
       const existingPlayer = acc.find(v => v.userId === userId);
 
@@ -69,18 +72,18 @@
 
       if (existingPlayer) {
         existingPlayer.vaults.push({
-          sendTo: !existingPlayer.hasAssignedVault && !!vaultGridData.freeSpaces,
+          sendTo: user.active && !existingPlayer.hasAssignedVault && !!vaultGridData.freeSpaces,
           actor: vault,
           vaultGridData
         });
-        existingPlayer.hasAssignedVault = existingPlayer.hasAssignedVault || !!vaultGridData.freeSpaces;
+        existingPlayer.hasAssignedVault = user.active && (existingPlayer.hasAssignedVault || !!vaultGridData.freeSpaces);
       } else {
         acc.push({
           userId,
           user,
           hasAssignedVault: !!vaultGridData.freeSpaces,
           vaults: [{
-            sendTo: !!vaultGridData.freeSpaces,
+            sendTo: user.active && !!vaultGridData.freeSpaces,
             actor: vault,
             vaultGridData
           }]
@@ -143,14 +146,6 @@
 
   function openVault(vault) {
     game.itempiles.API.renderItemPileInterface(vault);
-  }
-
-  function onDragOver() {
-
-  }
-
-  function onDragLeave() {
-
   }
 
   async function sendToVaults() {
@@ -228,6 +223,43 @@
     Hooks.off("deleteItem", deleteHookId);
   });
 
+  let action = "";
+  function massAction(){
+    if(!action) return;
+    const vaultsToChange = get(vaults);
+    switch(action){
+      case "none":
+      case "every":
+      case "every_active":
+        vaultsToChange.forEach(userCollection => {
+          userCollection.vaults.forEach(vault => {
+            vault.sendTo = false;
+          });
+          if(action === "none") return;
+          if(action === "every_active" && !userCollection.user.active) return;
+          const freeVaults = userCollection.vaults.filter(vault => vault.vaultGridData.freeSpaces);
+          if(!freeVaults.length) return;
+          freeVaults.sort((a, b) => a.vaultGridData.freeSpaces - b.vaultGridData.freeSpaces)
+          freeVaults[0].sendTo = true;
+        });
+        break;
+      case "sort":
+        vaultsToChange.forEach(userCollection => {
+          userCollection.vaults.sort((v_a, v_b) => {
+            return v_b.vaultGridData.freeSpaces - v_a.vaultGridData.freeSpaces;
+          });
+        });
+        vaultsToChange.sort((uc_a, uc_b) => {
+          const sendToSort = (uc_b.vaults.some(v => v.sendTo) - uc_a.vaults.some(v => v.sendTo)) * 10000;
+          const nameSort = (uc_a.user.name < uc_b.user.name ? -1 : 1) * 100;
+          return sendToSort + nameSort;
+        });
+        break;
+    }
+    vaults.set(vaultsToChange);
+    recalculateMinVaultSpaces();
+    action = "";
+  }
 
 </script>
 
@@ -235,14 +267,13 @@
 
 <ApplicationShell bind:elementRoot>
 
-  <DropZone callback={onDropData} overCallback={onDragOver} leaveCallback={onDragLeave}>
+  <DropZone callback={onDropData}>
 
     {#if vaultDescription}
       <div class="item-piles-bottom-divider" style="padding-bottom:0;">
         <TJSProseMirror
           content={vaultDescription}
           options={{ editable: false }}
-          style={{"display": "block"}}
         />
       </div>
     {:else}
@@ -257,7 +288,17 @@
       <div class="item-piles-flexcol"
            style="flex: 0 1 40%; border-right: 1px solid rgba(0,0,0,0.25); margin-right: 0.25rem; padding-right: 0.25rem;">
 
-        <input type="text" bind:value={$vaultSearch} style="flex: 0 1 auto; margin-bottom: 0.25rem;">
+        <input type="text" bind:value={$vaultSearch} placeholder="Search..." style="flex: 0 1 auto; margin-bottom: 0.25rem;">
+
+        <div style="flex: 0 1 auto; margin-bottom: 0.25rem;">
+          <select bind:value={action} on:change={() => massAction()}>
+            <option value="">Perform action...</option>
+            <option value="none">Deselect all vaults</option>
+            <option value="every">Select one vault from each player</option>
+            <option value="every_active">Select one vault from each <strong>active</strong> player</option>
+            <option value="sort">Sort by selected -> name -> vault size</option>
+          </select>
+        </div>
 
         <div style="max-height: 288px; overflow-y: scroll; padding-right: 0.25rem;">
 
@@ -298,16 +339,20 @@
 
       <div class="item-piles-flexcol" style="max-height: 319px;">
 
-        <div class="item-piles-bankers-item-container-list item-piles-bottom-divider" class:centered-flex={!$itemsToAdd.length}>
+        <div class="item-piles-bankers-item-container-list item-piles-bottom-divider" class:item-piles-bankers-centered-flex={!$itemsToAdd.length}>
 
           {#if !$itemsToAdd.length}
 
-            {#if spaceLeft}
-              <i class="item-piles-bankers-no-items-text" style="flex: 0;">Drag and drop items to add them</i>
+            {#if minVaultSpaces === Infinity}
+              <i class="item-piles-bankers-no-items-text" style="flex: 0;">Please select at least one vault</i>
+            {:else}
+              {#if spaceLeft}
+                <i class="item-piles-bankers-no-items-text" style="flex: 0;">Drag and drop items to add them</i>
+              {/if}
+              <i class="item-piles-bankers-no-items-text" style="flex: 0;">
+                You can send {spaceLeft > 0 ? spaceLeft : "no"} items to the selected vaults
+              </i>
             {/if}
-            <i class="item-piles-bankers-no-items-text" style="flex: 0;">
-              You can send {spaceLeft > 0 ? spaceLeft : "no"} items to the selected vaults
-            </i>
 
           {:else}
 

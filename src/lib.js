@@ -114,12 +114,12 @@ export function getActiveApps(id, single = false) {
 }
 
 
-
 export function getSetting(key, localize = false) {
   const value = game.settings.get(CONSTANTS.MODULE_NAME, key);
   if (localize) return game.i18n.localize(value);
   return value;
 }
+
 
 export function getItemPileSetting(key, localize = false) {
   const value = game.settings.get("item-piles", key);
@@ -127,6 +127,32 @@ export function getItemPileSetting(key, localize = false) {
   return value;
 }
 
+
 export function setSetting(key, value) {
   return game.settings.set(CONSTANTS.MODULE_NAME, key, value);
+}
+
+
+export function vaultItemRightClicked(item, contextMenu, vault) {
+  if(!game.user.isGM) return;
+
+  const bankerActorId = vault.getFlag(CONSTANTS.MODULE_NAME, 'bankerActorId');
+  if(!bankerActorId) return;
+
+  const bankerActor = game.actors.get(bankerActorId);
+  if(!bankerActor) return;
+
+  const userId = vault.getFlag(CONSTANTS.MODULE_NAME, 'vaultUserId');
+  if(!userId) return;
+
+  const user = game.users.get(userId);
+  if(!user) return;
+
+  contextMenu.push({
+    icon: 'fas fa-handcuffs', label: "Confiscate", onclick: async () => {
+      await game.itempiles.API.transferItems(vault, bankerActor, [item], { vaultLogData: { action: "confiscated" }});
+      bankerActor.sheet.render(true);
+      ui.notifications.warn(`\"${item.name}\" was confiscated from ${user.name}'s \"${vault.name}\" vault and put in ${bankerActor.name}'s inventory`, { permanent: true });
+    }
+  });
 }
