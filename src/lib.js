@@ -60,10 +60,16 @@ export function getCostOfVault(bankerActor) {
   const flags = bankerActor.getFlag("item-piles", 'data');
   const baseVaultCost = flags.vaultCostFormula;
 
-  const vaultPrice = evaluateFormula(baseVaultCost, {
+  const vaultTotal = evaluateFormula(baseVaultCost, {
     vaults: currentVaults.length,
     totalVaults: totalVaults.length
-  }).total + "GP";
+  }).total;
+
+  if(vaultTotal === 0){
+    return { vaultPrice: false, canBuy: true };
+  }
+
+  const vaultPrice = vaultTotal + "GP";
 
   const canBuy = game.user.character ? game.itempiles.API.getPaymentDataFromString(vaultPrice, {
     target: game.user.character
@@ -98,7 +104,9 @@ export async function createNewVault(bankerActor, vaultName){
 
   if(!bankVault) return false;
 
-  await game.itempiles.API.removeCurrencies(game.user.character, vaultPrice);
+  if(vaultPrice) {
+    await game.itempiles.API.removeCurrencies(game.user.character, vaultPrice);
+  }
 
   return bankVault;
 

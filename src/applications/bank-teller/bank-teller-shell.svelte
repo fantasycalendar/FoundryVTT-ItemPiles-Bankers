@@ -20,7 +20,7 @@
   let currentVaults = getCurrentVaults();
   let selectedVault = currentVaults[0]?.id ?? "new";
 
-  function getCurrentVaults(){
+  function getCurrentVaults() {
     return lib.getVaults({ bankerActor, userId: game.user.id }).map(vault => ({
       id: vault.id,
       uuid: vault.uuid,
@@ -108,12 +108,20 @@
   <div style="text-align: center;" class="item-piles-bottom-divider">
     <p>Welcome to <strong>{bankerActor.name}</strong>, {playerActor.name}!</p>
     <p>
-      {#if canBuy && !currentVaults.length}
-        I see you don't have an account with us yet, would you like to purchase a vault at our establishment for a mere
-        <strong>{vaultPrice}</strong>?
-      {:else if !canBuy && !currentVaults.length}
-        I see you don't have an account with us yet, but I'm afraid you need at least <strong>{vaultPrice}</strong> to
-        purchase a vault.
+      {#if !currentVaults.length}
+        <span>
+        {#if canBuy}
+          {#if vaultPrice}
+            I see you don't have an account with us yet, would you like to purchase a vault at our establishment for a
+            mere <strong>{vaultPrice}</strong>?
+          {:else}
+            I see you don't have an account with us yet, opening your first vault is free!
+          {/if}
+        {:else}
+          I see you don't have an account with us yet, but I'm afraid you need at least <strong>{vaultPrice}</strong> to
+          purchase a vault.
+        {/if}
+        </span>
       {:else}
         How can we help you today?
       {/if}
@@ -130,7 +138,12 @@
         {/each}
         {#if currentVaults.length < maxVaults}
           <option value="new" disabled={!canBuy || currentVaults.length >= maxVaults}>
-            New Vault ({vaultPrice}{!canBuy ? " - can't afford" : ""})
+            <span>
+              New Vault
+              {#if vaultPrice}
+                ({vaultPrice}{!canBuy ? " - can't afford" : ""})
+              {/if}
+            </span>
           </option>
         {/if}
       </select>
@@ -155,7 +168,10 @@
 
     <button type="button" style="font-size:1.25rem; line-height: inherit; padding: 0.5rem 0;"
             on:click={() => buttonPressed()} disabled={!canBuy}>
-      Purchase first vault
+      {vaultPrice ? "Purchase" : "Open"} first vault
+      {#if vaultPrice}
+        ({vaultPrice}{!canBuy ? " - can't afford" : ""})
+      {/if}
     </button>
 
   {/if}
