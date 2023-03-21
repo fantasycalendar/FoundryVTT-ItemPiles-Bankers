@@ -159,7 +159,7 @@ export function vaultItemRightClicked(item, contextMenu, vault) {
   contextMenu.push({
     icon: 'fas fa-handcuffs', label: "Confiscate", onclick: async () => {
       await game.itempiles.API.transferItems(vault, bankerActor, [item], { vaultLogData: { action: "confiscated" }});
-      bankerActor.sheet.render(true);
+      bankerActor.sheet.render(true, { focus: true, bypassItemPiles: true });
       ui.notifications.warn(`\"${item.name}\" was confiscated from ${user.name}'s \"${vault.name}\" vault and put in ${bankerActor.name}'s inventory`, { permanent: true });
     }
   });

@@ -55,7 +55,7 @@ export default class BankManagementApp extends SvelteApplication {
           class: "item-piles-open-actor-sheet",
           icon: "fas fa-user",
           onclick: () => {
-            this.options.bankerActor.sheet.render(true, { focus: true });
+            this.options.bankerActor.sheet.render(true, { focus: true, bypassItemPiles: true });
           }
         },
         {
