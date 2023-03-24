@@ -4,7 +4,7 @@
   import { writable } from "svelte/store";
   import * as lib from "../../lib.js";
 
-  const { application } = getContext('external');
+  const { application } = getContext('#external');
 
   export let form;
   export let vaultName = "";

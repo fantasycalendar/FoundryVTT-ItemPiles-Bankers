@@ -11,7 +11,7 @@
   import ProgressBar from "../components/ProgressBar.svelte";
   import { TJSProseMirror } from "@typhonjs-fvtt/svelte-standard/component/dev";
 
-  const { application } = getContext('external');
+  const { application } = getContext('#external');
 
   export let elementRoot;
 

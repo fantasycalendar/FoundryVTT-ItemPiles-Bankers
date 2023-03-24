@@ -7,7 +7,7 @@
   import CreateNewVaultDialog from "../components/CreateNewVaultDialog.svelte";
   import BankerSocket from "../../sockets.js";
 
-  const { application } = getContext('external');
+  const { application } = getContext('#external');
 
   export let elementRoot;
 
