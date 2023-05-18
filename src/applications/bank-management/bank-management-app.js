@@ -21,7 +21,7 @@ export default class BankManagementApp extends SvelteApplication {
       },
       classes: ["app window-app sheet item-piles-bankers"],
       zIndex: 100,
-      width: 600,
+      width: 800,
       height: "auto",
       closeOnSubmit: false,
       resizable: false

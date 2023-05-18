@@ -21,6 +21,18 @@ Hooks.once('item-piles-ready', async function() {
       type: String,
       value: "(@vaults+1)*50"
     },
+    folderName: {
+      title: "Bank Base Folder Name",
+      label: "This controls what the root folder of new bank vaults bought by players will be called.",
+      type: String,
+      value: "Bank Vaults"
+    },
+    defaultImage: {
+      title: "Default Bank Vault Image",
+      label: "This controls what any new bank vault actor image will be.",
+      type: String,
+      value: "icons/svg/item-bag.svg"
+    },
   });
 
   BankerSocket.initialize();

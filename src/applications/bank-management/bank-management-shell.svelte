@@ -35,7 +35,10 @@
   const currenciesToAdd = writable(game.itempiles.API.CURRENCIES.map(currency => {
     currency.quantity = 0;
     return currency;
-  }));
+  }).concat(game.itempiles.API.SECONDARY_CURRENCIES.map(currency => {
+    currency.quantity = 0;
+    return currency;
+  })));
 
   const vaults = writable(getVaultData(false));
 
@@ -156,9 +159,12 @@
     }));
 
     const currencyString = get(currenciesToAdd)
-      .filter(item => item.quantity)
+      .filter(currency => currency.quantity && currency.type === "attribute")
       .map(currency => currency.abbreviation.replace("{#}", currency.quantity))
       .join(" ");
+
+    const currencyItems = get(currenciesToAdd)
+      .filter(currency => currency.quantity && currency.type === "item");
 
     const vaultsToSendTo = get(vaults)
       .map(vaultUserCollection => vaultUserCollection.vaults
@@ -181,6 +187,13 @@
         await game.itempiles.API.addCurrencies(vaultActor, currencyString);
       }
 
+      if (currencyItems.length) {
+        await game.itempiles.API.addItems(vaultActor, currencyItems.map(currency => ({
+					item: currency.data.item,
+					quantity: currency.quantity
+				})));
+      }
+
       progressText = `Vault ${index} out of ${vaultsToSendTo.length} updated`;
       progress = index / vaultsToSendTo.length;
       index++;
@@ -191,7 +204,10 @@
     currenciesToAdd.set(game.itempiles.API.CURRENCIES.map(currency => {
       currency.quantity = 0;
       return currency;
-    }));
+    }).concat(game.itempiles.API.SECONDARY_CURRENCIES.map(currency => {
+      currency.quantity = 0;
+      return currency;
+    })));
 
     confirmSending = false;
     showProgressBar = false;

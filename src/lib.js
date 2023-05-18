@@ -83,14 +83,25 @@ export async function createNewVault(bankerActor, vaultName){
 
   const { vaultPrice, canBuy } = getCostOfVault(bankerActor);
 
+  const flags = bankerActor.getFlag("item-piles", 'data');
+
+  const folderStructure = [bankerActor.name, `${game.user.name}`];
+
+  if(flags?.folderName){
+    folderStructure.unshift(flags?.folderName);
+  }else{
+    folderStructure.unshift("Bank Vaults");
+  }
+
   if(!canBuy) return;
 
   const result = await game.itempiles.API.createItemPile({
     actor: vaultName,
     createActor: true,
-    folders: ["Bank Vaults", bankerActor.name, `${game.user.name}`],
+    folders: folderStructure,
     itemPileFlags: CONSTANTS.VAULT_DEFAULTS(game.user.character),
     actorOverrides: {
+      img: flags.defaultImage || "icons/svg/item-bag.svg",
       [CONSTANTS.FLAG]: {
         vaultUserId: game.user.id,
         bankerActorId: bankerActor.id,
