@@ -1,6 +1,7 @@
 import "./styles/styles.scss";
 import * as lib from "./lib.js";
 import BankerSocket from "./sockets.js";
+import CONSTANTS from "./constants.js";
 
 Hooks.once('item-piles-ready', async function() {
 
@@ -33,6 +34,18 @@ Hooks.once('item-piles-ready', async function() {
       type: String,
       value: "icons/svg/item-bag.svg"
     },
+    bankerColumns: {
+      title: "Number Of Columns",
+      label: "This is how many columns vaults created by this bank will have",
+      type: Number,
+      value: CONSTANTS.VAULT_DEFAULTS.cols
+    },
+    bankerRows: {
+      title: "Number Of Rows",
+      label: "This is how many rows vaults created by this bank will have",
+      type: Number,
+      value: CONSTANTS.VAULT_DEFAULTS.rows
+    }
   });
 
   BankerSocket.initialize();

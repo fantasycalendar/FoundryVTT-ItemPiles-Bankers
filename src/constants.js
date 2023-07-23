@@ -8,7 +8,16 @@ const CONSTANTS = {
   PATH: module_path,
   FLAG: flag,
 
-  VAULT_DEFAULTS: (playerActor) => ({
+  GET_VAULT_DEFAULTS: (bankerActor) => {
+    const defaults = foundry.utils.duplicate(this.VAULT_DEFAULTS);
+    defaults.vaultAccess[0].uuid = game.user.uuid;
+    const flags = bankerActor.getFlag("item-piles", "data");
+    defaults.cols = Math.max(1, flags?.bankerColumns ?? 12);
+    defaults.rows = Math.max(1, flags?.bankerRows ?? 8);
+    return defaults;
+  },
+
+  VAULT_DEFAULTS: {
     type: "vault",
     cols: 12,
     rows: 8,
@@ -17,7 +26,7 @@ const CONSTANTS = {
     baseExpansionRows: 8,
     preventVaultAccess: true,
     vaultAccess: [{
-      uuid: playerActor.uuid,
+      uuid: "",
       organize: true,
       items: {
         withdraw: true,
@@ -30,7 +39,7 @@ const CONSTANTS = {
     }],
     logVaultActions: true,
     vaultLogType: "user"
-  })
+  }
 
 }
 

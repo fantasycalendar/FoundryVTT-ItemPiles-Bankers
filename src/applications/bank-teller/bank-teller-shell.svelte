@@ -20,6 +20,8 @@
   let currentVaults = getCurrentVaults();
   let selectedVault = currentVaults[0]?.id ?? "new";
 
+  let hasButtonBeenPressed = false;
+
   function getCurrentVaults() {
     return lib.getVaults({ bankerActor, userId: game.user.id }).map(vault => ({
       id: vault.id,
@@ -29,6 +31,7 @@
   }
 
   function buttonPressed() {
+    hasButtonBeenPressed = true;
     if (selectedVault === 'new') {
       return createNewVault();
     }
@@ -43,6 +46,8 @@
   }
 
   async function createNewVault() {
+
+    hasButtonBeenPressed = true;
 
     const result = await new Promise(resolve => {
       let options = { resolve };
@@ -59,6 +64,8 @@
       }, options).render(true);
     });
 
+    hasButtonBeenPressed = false;
+
     if (!result) return;
 
     const vault = await lib.createNewVault(
@@ -69,6 +76,8 @@
   }
 
   async function renameVault() {
+
+    hasButtonBeenPressed = true;
 
     const vault = currentVaults.find(actor => actor.id === selectedVault);
     const result = await new Promise(resolve => {
@@ -88,6 +97,8 @@
         close: () => options.resolve?.(null)
       }, options).render(true);
     });
+
+    hasButtonBeenPressed = false;
 
     if (!result || result === vault.name) return;
 
@@ -149,6 +160,7 @@
       </select>
 
       <button type="button" style="flex: 0 1 30%; width: auto; line-height: inherit;"
+							:disabled={hasButtonBeenPressed}
               on:click={() => buttonPressed()}
       >
         {selectedVault === "new" ? "Purchase new vault" : "Open vault"}
@@ -156,7 +168,9 @@
 
       {#if selectedVault !== "new"}
         <button type="button" style="flex: 0 1 10%; width: auto; line-height: inherit;"
+								:disabled={hasButtonBeenPressed}
                 on:click={() => renameVault()}
+
         >
           Rename
         </button>
@@ -167,6 +181,7 @@
   {:else}
 
     <button type="button" style="font-size:1.25rem; line-height: inherit; padding: 0.5rem 0;"
+						:disabled={hasButtonBeenPressed}
             on:click={() => buttonPressed()} disabled={!canBuy}>
       {vaultPrice ? "Purchase" : "Open"} first vault
       {#if vaultPrice}

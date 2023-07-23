@@ -21,6 +21,7 @@
   let progress = 0;
   let progressText = "";
   let vaultDescription = "";
+  let buttonHasBeenPressed = false;
 
   const doc = new TJSDocument(bankerActor);
   $: {
@@ -153,6 +154,8 @@
 
   async function sendToVaults() {
 
+    buttonHasBeenPressed = true;
+
     const items = get(itemsToAdd).filter(item => item.quantity).map(item => ({
       item: item.data,
       quantity: item.quantity
@@ -214,6 +217,8 @@
     progress = 0;
 
     vaults.set(getVaultData());
+
+    buttonHasBeenPressed = false;
 
   }
 
@@ -451,13 +456,14 @@
         {/if}
 
         {#if !confirmSending}
-          <button type="button" class="item-piles-bankers-button" style="flex: 0 1 auto;" disabled={!canSendToVaults}
+          <button type="button" class="item-piles-bankers-button" style="flex: 0 1 auto;"
+									disabled={!canSendToVaults || buttonHasBeenPressed}
                   on:click={() => { confirmSending = true; }}>
             Send {totalItems && hasCurrency ? "items and currencies" : (totalItems ? "items" : "currencies")} to vaults
           </button>
         {:else}
           <div class="item-piles-flexrow" style="flex: 0 1 auto;">
-            <button type="button" class="item-piles-bankers-button" style="background-color: rgba(219,255,219,0.8);" disabled={!canSendToVaults}
+            <button type="button" class="item-piles-bankers-button" style="background-color: rgba(219,255,219,0.8);" disabled={!canSendToVaults || buttonHasBeenPressed}
                     on:click={() => sendToVaults()}>
               Confirm
             </button>

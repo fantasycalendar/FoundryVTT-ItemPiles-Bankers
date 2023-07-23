@@ -99,7 +99,7 @@ export async function createNewVault(bankerActor, vaultName){
     actor: vaultName,
     createActor: true,
     folders: folderStructure,
-    itemPileFlags: CONSTANTS.VAULT_DEFAULTS(game.user.character),
+    itemPileFlags: CONSTANTS.GET_VAULT_DEFAULTS(bankerActor),
     actorOverrides: {
       img: flags.defaultImage || "icons/svg/item-bag.svg",
       [CONSTANTS.FLAG]: {
