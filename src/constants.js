@@ -9,7 +9,7 @@ const CONSTANTS = {
   FLAG: flag,
 
   GET_VAULT_DEFAULTS: (bankerActor) => {
-    const defaults = foundry.utils.duplicate(this.VAULT_DEFAULTS);
+    const defaults = foundry.utils.duplicate(CONSTANTS.VAULT_DEFAULTS);
     defaults.vaultAccess[0].uuid = game.user.uuid;
     const flags = bankerActor.getFlag("item-piles", "data");
     defaults.cols = Math.max(1, flags?.bankerColumns ?? 12);

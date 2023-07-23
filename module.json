@@ -4,11 +4,11 @@
   "description": "This module extends the Item Piles module to add support for a banker NPC that can create and open multiple vaults.",
   "version": "100.0.0",
   "library": "false",
-  "minimumCoreVersion": "10",
+  "minimumCoreVersion": "11",
   "compatibility": {
     "minimum": "10",
-    "verified": "10",
-    "maximum": "10"
+    "verified": "11",
+    "maximum": "11"
   },
   "authors": [
     {
