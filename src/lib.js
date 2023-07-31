@@ -26,7 +26,7 @@ export function bankTellerClicked(itemPile){
 
   const maxVaults = flags?.maxVaults ?? 1;
 
-  const vaults = getVaults({ bankerActor });
+  const vaults = getVaults({ userId: game.user.id, bankerActor });
   if(maxVaults === 1 && vaults.length === 1){
     game.itempiles.API.renderItemPileInterface(vaults[0], { inspectingTarget: game.user.character });
   }else{
