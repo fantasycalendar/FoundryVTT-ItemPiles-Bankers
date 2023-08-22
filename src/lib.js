@@ -2,13 +2,13 @@ import CONSTANTS from "./constants.js";
 import BankTellerApp from "./applications/bank-teller/bank-teller-app.js";
 import BankManagementApp from "./applications/bank-management/bank-management-app.js";
 
-export function bankTellerClicked(itemPile){
+export function bankTellerRendered(itemPile){
 
   const bankerActor = itemPile?.actor ?? itemPile;
 
   const flags = bankerActor.getFlag("item-piles", 'data');
 
-  if(flags?.type !== "banker") return true;
+  if(flags?.type !== "banker") return;
 
   if(!game.user.character){
 

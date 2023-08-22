@@ -5,8 +5,12 @@ import CONSTANTS from "./constants.js";
 
 Hooks.once('item-piles-ready', async function() {
 
-  Hooks.on(game.itempiles.hooks.PILE.PRE_CLICK, lib.bankTellerClicked);
-  Hooks.on(game.itempiles.hooks.PILE.PRE_DIRECTORY_CLICK, lib.bankTellerClicked);
+  if(game.itempiles.hooks.PILE.PRE_RENDER_INTERFACE) {
+    Hooks.on(game.itempiles.hooks.PILE.PRE_RENDER_INTERFACE, lib.bankTellerRendered);
+  }else {
+    Hooks.on(game.itempiles.hooks.PILE.PRE_CLICK, lib.bankTellerRendered);
+    Hooks.on(game.itempiles.hooks.PILE.PRE_DIRECTORY_CLICK, lib.bankTellerRendered);
+  }
   Hooks.on(game.itempiles.hooks.PILE.PRE_RIGHT_CLICK_ITEM, lib.vaultItemRightClicked);
 
   game.itempiles.API.registerItemPileType("banker", "Banker", {
