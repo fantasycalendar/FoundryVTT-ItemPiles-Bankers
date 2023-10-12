@@ -126,7 +126,7 @@
 
     itemsToAdd.update(items => {
       const existingItem = items.find(i => i.data._id === itemData._id || (i.data.name === itemData.name && i.data.type === itemData.type))
-      if (existingItem) {
+      if (existingItem && existingItem.canStack) {
         existingItem.quantity++;
       } else {
         items.push({
