@@ -4,7 +4,7 @@ import BankerSocket from "./sockets.js";
 import CONSTANTS from "./constants.js";
 
 Hooks.once("ready", () => {
-  Hooks.on(game.itempiles.hooks.PILE.PRE_RENDER_INTERFACE, lib.bankTellerRendered);
+  Hooks.on(game.itempiles.hooks.PRE_RENDER_INTERFACE, lib.bankTellerRendered);
   Hooks.on(game.itempiles.hooks.PILE.PRE_RIGHT_CLICK_ITEM, lib.vaultItemRightClicked);
 
   game.itempiles.API.registerItemPileType("banker", "Banker", {
