@@ -14,6 +14,8 @@ const CONSTANTS = {
     const flags = bankerActor.getFlag("item-piles", "data");
     defaults.cols = Math.max(1, flags?.bankerColumns ?? 12);
     defaults.rows = Math.max(1, flags?.bankerRows ?? 8);
+    defaults.baseExpansionCols = Math.max(1, flags?.bankerEnabledCols ?? 2);
+    defaults.baseExpansionRows = Math.max(1, flags?.bankerEnabledRows ?? 8);
     return defaults;
   },
 

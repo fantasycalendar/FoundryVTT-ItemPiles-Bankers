@@ -43,6 +43,18 @@ Hooks.once("ready", () => {
       label: "This is how many rows vaults created by this bank will have",
       type: Number,
       value: CONSTANTS.VAULT_DEFAULTS.rows
+    },
+	  bankerEnabledCols: {
+      title: "Number Of Enabled Columns",
+      label: "This is how many enabled columns vaults created by this bank will have",
+      type: Number,
+      value: CONSTANTS.VAULT_DEFAULTS.baseExpansionCols
+    },
+    bankerEnabledRows: {
+      title: "Number Of Rows",
+      label: "This is how many enabled rows vaults created by this bank will have",
+      type: Number,
+      value: CONSTANTS.VAULT_DEFAULTS.baseExpansionRows
     }
   });
 
