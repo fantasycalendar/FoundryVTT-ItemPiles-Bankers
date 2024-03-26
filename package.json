@@ -1,27 +1,31 @@
 {
-  "name": "essential-svelte-esm",
-  "version": "0.0.5",
-  "description": "Provides essential TRL demos for reactivity and beyond.",
+  "name": "item_piles_bankers",
+  "version": "1.0.0",
+  "description": "A foundry module.",
   "license": "MIT",
   "private": true,
   "type": "module",
-  "author": "Michael Leahy <support@typhonjs.io> (https://github.com/typhonrt)",
+  "author": "Fantasy Computerworks (https://github.com/fantasycalendar)",
   "contributors": [
-    "Michael Leahy <support@typhonjs.io> (https://github.com/typhonrt)"
+    "Wasp <adam@fantasy-calendar.com> (https://github.com/haxxer)"
   ],
+  "imports": {
+    "#runtime/*": "@typhonjs-fvtt/runtime/*",
+    "#standard/*": "@typhonjs-fvtt/svelte-standard/*"
+  },
   "dependencies": {
-    "@typhonjs-fvtt/runtime": "^0.0.22",
-    "@typhonjs-fvtt/svelte-standard": "^0.0.23",
-    "svelte": "^3.57.0"
+    "@typhonjs-fvtt/runtime": "^0.1.2",
+    "@typhonjs-fvtt/svelte-standard": "^0.1.0",
+    "svelte": "^4.1.2"
   },
   "devDependencies": {
     "@league-of-foundry-developers/foundry-vtt-types": "^9.238.1",
-    "@typhonjs-config/eslint-config": "^0.3.0",
+    "@typhonjs-config/eslint-config": "^0.6.0",
     "@typhonjs-fvtt/eslint-config-foundry.js": "^0.8.0",
-    "eslint": "^8",
+    "eslint": "^8.46.0",
     "svelte-dnd-action": "^0.9.18",
-    "svelte-preprocess": "^5",
-    "vite": "^4"
+    "svelte-preprocess": "^5.0.4",
+    "vite": "^4.4.8"
   },
   "browserslist": [
     ">5%",

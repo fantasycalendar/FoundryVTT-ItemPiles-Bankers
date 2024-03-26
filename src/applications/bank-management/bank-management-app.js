@@ -1,4 +1,4 @@
-import { SvelteApplication } from '@typhonjs-fvtt/runtime/svelte/application';
+import { SvelteApplication } from '#runtime/svelte/application';
 import BankManagementShell from "./bank-management-shell.svelte";
 import * as lib from "../../lib.js";
 
@@ -21,10 +21,10 @@ export default class BankManagementApp extends SvelteApplication {
       },
       classes: ["app window-app sheet item-piles-bankers"],
       zIndex: 100,
-      width: 800,
-      height: "auto",
+      width: 900,
+      height: 500,
       closeOnSubmit: false,
-      resizable: false
+      resizable: true
     });
   }
 

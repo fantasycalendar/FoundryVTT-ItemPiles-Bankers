@@ -24,7 +24,7 @@ Hooks.once("ready", () => {
       title: "Bank Base Folder Name",
       label: "This controls what the root folder of new bank vaults bought by players will be called.",
       type: String,
-      value: "Bank Vaults"
+      value: "Bank Vaults/@banker.name/@user.name"
     },
     defaultImage: {
       title: "Default Bank Vault Image",

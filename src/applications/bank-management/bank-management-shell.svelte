@@ -1,15 +1,15 @@
 <script>
 
-  import { ApplicationShell } from '@typhonjs-fvtt/runtime/svelte/component/core';
-  import { TJSDocument } from '@typhonjs-fvtt/runtime/svelte/store';
+  import { ApplicationShell } from '#runtime/svelte/component/core';
+  import { TJSDocument } from "#runtime/svelte/store/fvtt/document";
   import { getContext, onDestroy, onMount } from 'svelte';
   import * as lib from "../../lib.js";
   import { get, writable } from "svelte/store";
   import DropZone from "../components/DropZone.svelte";
-  import { localize } from "@typhonjs-fvtt/runtime/svelte/helper";
+  import { localize } from "#runtime/svelte/helper";
   import CONSTANTS from "../../constants.js";
   import ProgressBar from "../components/ProgressBar.svelte";
-  import { TJSProseMirror } from "@typhonjs-fvtt/svelte-standard/component/dev";
+  import { TJSProseMirror } from "#standard/component";
 
   const { application } = getContext('#external');
 
@@ -288,7 +288,7 @@
 
 <ApplicationShell bind:elementRoot>
 
-  <DropZone callback={onDropData}>
+  <DropZone callback={onDropData} style="max-height: 100%; display: flex; flex-direction: column; overflow: hidden;">
 
     {#if vaultDescription}
       <div class="item-piles-bottom-divider" style="padding-bottom:0;">
@@ -304,10 +304,10 @@
       </div>
     {/if}
 
-    <div class="item-piles-flexrow">
+    <div class="item-piles-flexrow item-piles-bankers-main-body">
 
       <div class="item-piles-flexcol"
-           style="flex: 0 1 40%; border-right: 1px solid rgba(0,0,0,0.25); margin-right: 0.25rem; padding-right: 0.25rem;">
+           style="flex: 0 1 350px; border-right: 1px solid rgba(0,0,0,0.25); margin-right: 0.25rem; padding-right: 0.25rem; height: 100%;">
 
         <input type="text" bind:value={$vaultSearch} placeholder="Search..." style="flex: 0 1 auto; margin-bottom: 0.25rem;">
 
@@ -321,7 +321,7 @@
           </select>
         </div>
 
-        <div style="max-height: 288px; overflow-y: scroll; padding-right: 0.25rem;">
+        <div style="height: 100%; overflow-y: scroll; padding-right: 0.25rem;">
 
           {#each visibleVaults as userCollection, index (userCollection.userId)}
 
@@ -358,7 +358,7 @@
 
       </div>
 
-      <div class="item-piles-flexcol" style="max-height: 319px;">
+      <div class="item-piles-flexcol" style="height: 100%; display: flex;">
 
         <div class="item-piles-bankers-item-container-list item-piles-bottom-divider" class:item-piles-bankers-centered-flex={!$itemsToAdd.length}>
 
@@ -485,3 +485,24 @@
   </DropZone>
 
 </ApplicationShell>
+
+
+<style lang="scss">
+
+	.item-piles-bankers-main-body {
+		flex: 1;
+		overflow: hidden;
+	}
+
+  .item-piles-bankers-item-container-list {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+
+    > * {
+      flex: 1;
+    }
+  }
+
+</style>

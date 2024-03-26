@@ -8,19 +8,6 @@
   text-align: center;
 }
 
-.item-piles-bankers-item-container-list {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-height: 235px;
-  max-height: 235px;
-  overflow-y: scroll;
-
-  > * {
-    flex: 1;
-  }
-}
-
 .item-piles-bankers-centered-flex {
   justify-content: center;
   text-align: center;
