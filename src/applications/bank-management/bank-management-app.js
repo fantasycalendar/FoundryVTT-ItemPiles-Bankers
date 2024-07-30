@@ -6,7 +6,7 @@ export default class BankManagementApp extends SvelteApplication {
 
   constructor(options, dialogOptions) {
     super({
-      id: `item-piles-management-${options.bankerActor?.id}-${randomID()}`,
+      id: `item-piles-management-${options.bankerActor?.id}-${foundry.utils.randomID()}`,
       title: options.bankerActor.name,
       ...options,
     }, dialogOptions);

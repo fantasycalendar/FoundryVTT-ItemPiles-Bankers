@@ -6,7 +6,7 @@ export default class BankTellerApp extends SvelteApplication {
 
   constructor(options, dialogOptions) {
     super({
-      id: `item-piles-bankers-${options.bankerActor?.id}-${randomID()}`,
+      id: `item-piles-bankers-${options.bankerActor?.id}-${foundry.utils.randomID()}`,
       title: options.bankerActor.name,
       ...options,
     }, dialogOptions);

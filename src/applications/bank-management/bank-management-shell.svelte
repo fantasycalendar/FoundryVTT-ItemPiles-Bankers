@@ -130,7 +130,7 @@
         existingItem.quantity++;
       } else {
         items.push({
-          id: randomID(),
+          id: foundry.utils.randomID(),
           canStack: game.itempiles.API.canItemStack(itemData),
           quantity: 1,
           data: itemData

@@ -39,7 +39,8 @@ export function bankTellerRendered(itemPile) {
 
 export function evaluateFormula(formula, data, warn = true) {
 	const rollFormula = Roll.replaceFormulaData(formula, data, { warn });
-	return new Roll(rollFormula).evaluate({ async: false });
+	const roll = new Roll(rollFormula);
+	return roll.evaluateSync ? roll.evaluateSync() : roll.evaluate({ async: false });
 }
 
 export function getVaults({ userId = false, bankerActor = false } = {}) {
