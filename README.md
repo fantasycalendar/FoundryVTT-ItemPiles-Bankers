@@ -7,7 +7,7 @@ This module expands upon the vault features of [Item Piles](https://github.com/f
 
 To install, simply copy and paste this into the module installer in Foundry:
 
-`https://github.com/fantasycalendar/FoundryVTT-Bankers/releases/latest/download/module.json`
+`https://github.com/fantasycalendar/FoundryVTT-ItemPiles-Bankers/releases/latest/download/module.json`
 
 
 ## Screenshots
